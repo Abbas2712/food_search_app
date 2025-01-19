@@ -1,10 +1,10 @@
-from django.db.models import Avg, Q
+from django.db.models import Avg
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework import filters
 from rest_framework.filters import BaseFilterBackend
 from rest_framework.exceptions import NotFound, ValidationError
-from .models import Products, ProductToppings, Ratings
+from rest_framework.permissions import IsAuthenticated
+from .models import Products
 from .serializers import ProductSerializer
 # Create your views here.
 
@@ -80,6 +80,7 @@ class ProductCreateView(generics.CreateAPIView):
       - Response 400: Returns validation errors if the provided data is invalid.
     """
     serializer_class = ProductSerializer
+    permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         """
@@ -126,6 +127,7 @@ class ProductRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
       - Response 500: Returns an error if the deletion process fails.
     """
     serializer_class = ProductSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_object(self):
         """
