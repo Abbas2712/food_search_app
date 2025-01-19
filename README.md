@@ -45,17 +45,17 @@ python manage.py createsuperuser
 ## Run the server
 python manage.py runserver
 
-### Authentication
+## Authentication
 This API uses JWT-based authentication. You can obtain a token by logging in via the /api/token/ endpoint and passing it in the Authorization header as Bearer <token> for protected endpoints.
 
-### Custom Pagination
+## Custom Pagination
 The ProductPagination class provides a custom pagination scheme with:
 
 - Default page size: 10 items per page.
 - Maximum page size: 100 items per page.
 - Page size query: You can change the page size via the page_size query parameter.
 
-### Custom Filtering
+## Custom Filtering
 The ProductFilterBackend class supports filtering by:
 
 - **Price**: min_price, max_price
