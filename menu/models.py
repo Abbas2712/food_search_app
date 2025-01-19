@@ -17,7 +17,7 @@ class ProductToppings(models.Model):
 
 
 class Products(models.Model):
-    PRODUCT_TYPE = [('veg', 'Veg'), ('non-veg','Non-Veg')]
+    PRODUCT_TYPE = [('Veg', 'Veg'), ('Non-Veg','Non-Veg')]
 
     product_id = models.AutoField(primary_key=True)
     product_name = models.CharField(max_length=255)
