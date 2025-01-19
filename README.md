@@ -34,16 +34,16 @@ cd <repository-folder>
 ```
 
 ## Install dependencies
-pip install -r requirements.txt
+```pip install -r requirements.txt```
 
 ## Migrate the database
-python manage.py migrate
+```python manage.py migrate```
 
 ## Create a superuser (optional, for accessing Django admin):
-python manage.py createsuperuser
+```python manage.py createsuperuser```
 
 ## Run the server
-python manage.py runserver
+```python manage.py runserver```
 
 ## Authentication
 This API uses JWT-based authentication. You can obtain a token by logging in via the /api/token/ endpoint and passing it in the Authorization header as Bearer <token> for protected endpoints.
