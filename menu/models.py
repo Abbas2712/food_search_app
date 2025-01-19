@@ -22,7 +22,7 @@ class Products(models.Model):
     product_id = models.AutoField(primary_key=True)
     product_name = models.CharField(max_length=255)
     product_description = models.CharField(max_length=255)
-    product_price = models.DecimalField()
+    product_price = models.DecimalField(decimal_places=2, max_digits=5)
     product_category = models.CharField(max_length=100)
     product_type = models.CharField(max_length=7, choices=PRODUCT_TYPE)
 
