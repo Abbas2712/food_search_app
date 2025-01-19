@@ -12,7 +12,7 @@ class ProductToppings(models.Model):
     topping = models.ForeignKey('Toppings', models.DO_NOTHING)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'product_toppings'
 
 
@@ -27,7 +27,7 @@ class Products(models.Model):
     product_type = models.CharField(max_length=7, choices=PRODUCT_TYPE)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'products'
 
 
@@ -37,17 +37,17 @@ class Ratings(models.Model):
     rating_value = models.DecimalField(max_digits=3, decimal_places=1)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'ratings'
 
 
 class Toppings(models.Model):
     topping_id = models.AutoField(primary_key=True)
-    group = models.ForeignKey('ToppingsGroups', models.DO_NOTHING)
+    group = models.ForeignKey(ProductToppings, models.DO_NOTHING)
     topping_name = models.CharField(max_length=100)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'toppings'
 
 
@@ -56,5 +56,5 @@ class ToppingsGroups(models.Model):
     group_name = models.CharField(max_length=100)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'toppings_groups'

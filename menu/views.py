@@ -1,13 +1,49 @@
+from django.db.models import Avg, Q
 from rest_framework import generics, status
 from rest_framework.response import Response
+from rest_framework import filters
+from rest_framework.filters import BaseFilterBackend
 from rest_framework.exceptions import NotFound, ValidationError
-from .models import Products
+from .models import Products, ProductToppings, Ratings
 from .serializers import ProductSerializer
 # Create your views here.
 
+class ProductFilterBackend(BaseFilterBackend):
+    """
+    Custom filter backend for filtering products based on various attributes.
+    """
+
+    def filter_queryset(self, request, queryset, view):
+        # Filter by price range
+        min_price = request.query_params.get('min_price')
+        max_price = request.query_params.get('max_price')
+        if min_price and max_price:
+            queryset = queryset.filter(product_price__gte=min_price, product_price__lte=max_price)
+
+        # Filter by average rating
+        min_rating = request.query_params.get('min_rating')
+        if min_rating:
+            queryset = queryset.annotate(avg_rating=Avg('ratings__rating_value')).filter(avg_rating__gte=min_rating)
+
+        # Filter by category
+        category = request.query_params.get('category')
+        if category:
+            queryset = queryset.filter(product_category__icontains=category)
+
+        # Filter by toppings
+        toppings = request.query_params.getlist('toppings')
+        if toppings:
+            queryset = queryset.filter(producttoppings__topping__topping_name__in=toppings).distinct()
+
+        # Filter by product type
+        product_type = request.query_params.get('product_type')
+        if product_type:
+            queryset = queryset.filter(product_type__iexact=product_type)
+
+        return queryset
 class ProductsListView(generics.ListAPIView):
     """
-    ProductsView handles listing all products.
+    ProductsView handles listing all products with filtering functionality.
 
     Methods:
     - GET: Retrieves all products.
@@ -15,6 +51,8 @@ class ProductsListView(generics.ListAPIView):
     """
     queryset = Products.objects.all()
     serializer_class = ProductSerializer
+    # Filter backends
+    filter_backends = [ProductFilterBackend]
 
     def list(self, request, *args, **kwargs):
         """
@@ -23,7 +61,7 @@ class ProductsListView(generics.ListAPIView):
         - If products exist, returns a 200 status with the list of products.
         - If no products exist, returns a 404 status with a message.
         """
-        queryset = self.get_queryset()
+        queryset = self.filter_queryset(self.get_queryset())
 
         if not queryset.exists():
             return Response({"message": "No products found"}, status=status.HTTP_404_NOT_FOUND)
